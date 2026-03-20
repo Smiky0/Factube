@@ -7,16 +7,17 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@google/genai": "^1.46.0",
     "@hono/node-server": "^1.19.11",
     "@supabase/supabase-js": "^2.99.3",
     "dotenv": "^17.3.1",
     "hono": "^4.12.8",
-    "youtube-transcript-plus": "^1.2.0",
-    "youtubei.js": "^17.0.1"
+    "openai": "^6.32.0",
+    "youtube-transcript-plus": "^1.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "tsx": "^4.7.1",
-    "typescript": "^5.8.3"
+    "@types/node": "^20.19.37",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }

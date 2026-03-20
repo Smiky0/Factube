@@ -9,4 +9,4 @@ if (!supabaseURL && !supabaseAnonKey) {
     throw new Error("Missing supabase environment keys.");
 }
 
-export const superbase = createClient(supabaseURL!, supabaseAnonKey!);
+export const supabase = createClient(supabaseURL!, supabaseAnonKey!);
