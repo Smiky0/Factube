@@ -8,12 +8,13 @@ type VideoInfo = Awaited<ReturnType<Innertube["getInfo"]>>;
 export default function VideoDetails({ video_id }: { video_id: string }) {
     const [info, setInfo] = useState<VideoInfo | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
     useEffect(() => {
         const response = async () => {
             setLoading(true);
             try {
                 const res = await fetch(
-                    `http://localhost:3000/api/video_details?q=${video_id}`,
+                    `${BASE_URL}/api/video_details?q=${video_id}`,
                 );
                 const data = await res.json();
                 setInfo(data);

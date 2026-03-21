@@ -17,10 +17,10 @@ export async function fact_check_withOpenRouter(transcript: string) {
         ],
     });
     if (response) {
-        console.log(response.choices[0].message.content);
+        // console.log(response.choices[0].message.content);
         return response.choices[0].message.content;
     } else {
-        console.log("Open Router couldn't fact check.");
+        // console.log("Open Router couldn't fact check.");
         return null;
     }
 }

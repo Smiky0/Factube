@@ -5,9 +5,9 @@ import { logger } from "hono/logger";
 import { fact_check_withAI } from "./services/factCheck.js";
 import { get_youtubetranscript } from "./services/getTranscript.js";
 import { find_conclusion, save_conclusion } from "./services/databaseAction.js";
-import { youtube_parser } from "./services/ytParser.js";
 import { getVideoDetails } from "./services/getVideoDetails.js";
 import { cors } from "hono/cors";
+const CLIENT_URL = process.env.CLIENT_URL;
 
 const app = new Hono();
 
@@ -18,7 +18,7 @@ app.use(logger());
 app.use(
     "/*",
     cors({
-        origin: "http://localhost:5173",
+        origin: CLIENT_URL || "http://localhost:5173",
         allowMethods: ["GET", "POST", "PUT", "DELETE"],
     }),
 );
@@ -48,15 +48,15 @@ app.get("/api/video_details", async (c) => {
 // get AI fact check.
 app.post("/url", async (c) => {
     const vid_id = c.req.query("q");
-    // console.log(vid_id)
-    if (!vid_id ) {
+    // console.log(vid_id);
+    if (!vid_id) {
         // invalid url
         return c.text("Invalid URL");
     } else {
         // valid url
         // check ID against the DB
         const conclusion = await find_conclusion(vid_id);
-        console.log("Got data from DB");
+        // console.log("Got data from DB");
         // if result is found
         if (conclusion) {
             return c.json(conclusion);
@@ -70,23 +70,23 @@ app.post("/url", async (c) => {
             // try youtube caption as fallback (not working for now)
             // const captions = await get_youtubecaption(vid_id);
             // return c.json(captions);
-            console.log("no transcript?");
+            // console.log("no transcript?");
             return c.json(null);
         } else {
             // successfully got transcript
             // send transcript to AI for fact checking
 
             const conclusion = await fact_check_withAI(transcript);
-            console.log("Fact checked from AI");
+            // console.log("Fact checked from AI");
 
             // if AI responses right push it to DB and send to user
             if (conclusion) {
-                console.log("Saving details to DB");
+                // console.log("Saving details to DB");
                 await save_conclusion(vid_id, conclusion);
                 return c.json(conclusion);
             } else {
                 // otherwise return null.
-                console.log("is it here wtf");
+                // console.log("is it here wtf");
                 return c.json(null);
             }
         }
@@ -99,7 +99,7 @@ app.notFound((c) => {
 });
 
 app.onError((err, c) => {
-    console.log(err);
+    // console.log(err);
     return c.text("Caused an uncaught error.", 500);
 });
 
@@ -109,6 +109,6 @@ serve(
         port: 3000,
     },
     (info) => {
-        console.log(`Server is running on http://localhost:${info.port}`);
+        // console.log(`Server is running on http://localhost:${info.port}`);
     },
 );

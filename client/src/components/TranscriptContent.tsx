@@ -2,6 +2,7 @@ import { CheckmarkCircle03Icon, Copy01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 interface Claim {
     id: number;
@@ -29,10 +30,9 @@ export default function TranscriptContent({ video_id }: { video_id: string }) {
         const response = async () => {
             try {
                 setLoading(true);
-                const res = await fetch(
-                    `http://localhost:3000/url?q=${video_id}`,
-                    { method: "POST" },
-                );
+                const res = await fetch(`${BASE_URL}/url?q=${video_id}`, {
+                    method: "POST",
+                });
                 const data = await res.json();
                 const conclusion =
                     typeof data.conclusion === "string" ?

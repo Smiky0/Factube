@@ -19,7 +19,7 @@ export async function save_conclusion(video_id: string, conclusion: string) {
         video_id: video_id,
         conclusion: conclusion,
     });
-    console.log("data: ", data);
-    console.log("error: ", error);
+    // console.log("data: ", data);
+    // console.log("error: ", error);
     return error ? null : data;
 }

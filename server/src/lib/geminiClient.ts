@@ -20,7 +20,7 @@ export async function fact_check_withGemini(transcript: string) {
         contents: USER_PROMPT(transcript),
     });
     if (response) {
-        console.log(response.text);
+        // console.log(response.text);
         return response.text;
     } else {
         return null;

@@ -22,8 +22,8 @@ export default function App() {
             } else {
                 // console.log(vid_id);
                 setVideoID(vid_id);
-			}
-			setStatus("")
+            }
+            setStatus("");
         }
     };
 
