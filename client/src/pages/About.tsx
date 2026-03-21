@@ -71,6 +71,11 @@ export default function About() {
                 className="mb-10"
             >
                 <div className="flex items-center gap-3 mb-3">
+                    <img
+                        src="/assets/factube_logo.png"
+                        width={50}
+                        height={50}
+                    />
                     <span className="text-xl font-medium text-gray-900">
                         Factube
                     </span>

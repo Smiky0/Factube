@@ -49,8 +49,18 @@ export default function TranscriptContent({ video_id }: { video_id: string }) {
         };
         response();
     }, [video_id]);
-    if (loading) <div>Fetching facts from AI </div>;
-    if (!loading && !facts) <div>Nothing found.</div>;
+    if (loading)
+        return (
+            <div className="flex justify-center items-center m-10">
+                Fetching facts...{" "}
+            </div>
+        );
+    if (!loading && !facts)
+        return (
+            <div className="flex justify-center items-center m-10">
+                Unable to get facts checked.
+            </div>
+        );
     return (
         <section className="mt-32 space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-outline-variant/10 pb-8">
