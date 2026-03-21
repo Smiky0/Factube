@@ -6,11 +6,22 @@ import { fact_check_withAI } from "./services/factCheck.js";
 import { get_youtubetranscript } from "./services/getTranscript.js";
 import { find_conclusion, save_conclusion } from "./services/databaseAction.js";
 import { youtube_parser } from "./services/ytParser.js";
+import { getVideoDetails } from "./services/getVideoDetails.js";
+import { cors } from "hono/cors";
 
 const app = new Hono();
 
 // log each request in production
 app.use(logger());
+
+// get rid of cors
+app.use(
+    "/*",
+    cors({
+        origin: "http://localhost:5173",
+        allowMethods: ["GET", "POST", "PUT", "DELETE"],
+    }),
+);
 
 // health check
 app.get("/health", (c) => {
@@ -22,12 +33,23 @@ app.get("/", (c) => {
     return c.text("Heyooo...");
 });
 
-// check in DB for result.
+// check video details
+app.get("/api/video_details", async (c) => {
+    const vid_id = c.req.query("q");
+    if (!vid_id) return c.json({ error: "Invalid URL" }, 400);
+    try {
+        const info = await getVideoDetails(vid_id);
+        return c.json(info);
+    } catch {
+        return c.json({ error: "failed to details" }, 500);
+    }
+});
+
+// get AI fact check.
 app.post("/url", async (c) => {
-    const query = c.req.query("q");
-    const vid_id = query ? youtube_parser(query) : undefined;
+    const vid_id = c.req.query("q");
     // console.log(vid_id)
-    if (!vid_id || !query) {
+    if (!vid_id ) {
         // invalid url
         return c.text("Invalid URL");
     } else {
@@ -71,7 +93,7 @@ app.post("/url", async (c) => {
     }
 });
 
-// wrong url 
+// wrong url
 app.notFound((c) => {
     return c.text("Page not found", 404);
 });
