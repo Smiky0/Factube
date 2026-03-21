@@ -3,12 +3,12 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Innertube } from "youtubei.js";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 type VideoInfo = Awaited<ReturnType<Innertube["getInfo"]>>;
 
 export default function VideoDetails({ video_id }: { video_id: string }) {
     const [info, setInfo] = useState<VideoInfo | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const BASE_URL = import.meta.env.VITE_BASE_URL;
     useEffect(() => {
         const response = async () => {
             setLoading(true);
@@ -28,8 +28,18 @@ export default function VideoDetails({ video_id }: { video_id: string }) {
         response();
     }, [video_id]);
 
-    if (loading) return <div>Fetching data from YouTube</div>;
-    if (!loading && !info) return <div>No data found.</div>;
+    if (loading)
+        return (
+            <div className="flex justify-center items-center m-10">
+                Fetching data from YouTube
+            </div>
+        );
+    if (!loading && !info)
+        return (
+            <div className="flex justify-center items-center m-10">
+                No data found.
+            </div>
+        );
     return (
         <section className="mt-32 flex flex-col lg:flex-row gap-12 items-center justify-center">
             <motion.div
