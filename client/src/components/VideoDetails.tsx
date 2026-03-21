@@ -2,22 +2,33 @@ import { User } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
-import Innertube from "youtubei.js";
+import { Innertube } from "youtubei.js";
+type VideoInfo = Awaited<ReturnType<Innertube["getInfo"]>>;
 
-type VideoInfoType = Awaited<ReturnType<Innertube["getInfo"]>>;
 export default function VideoDetails({ video_id }: { video_id: string }) {
-    const [info, setInfo] = useState<VideoInfoType | null>(null);
-
+    const [info, setInfo] = useState<VideoInfo | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     useEffect(() => {
-        console.log("whatsup");
-        const fetchInfo = async () => {
-            const youtube = await Innertube.create();
-            const vidInfo = await youtube.getInfo(video_id);
-            console.log("got sum");
-            setInfo(vidInfo);
+        const response = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(
+                    `http://localhost:3000/api/video_details?q=${video_id}`,
+                );
+                const data = await res.json();
+                setInfo(data);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+                // console.log("HERE");
+            }
         };
-        fetchInfo();
+        response();
     }, [video_id]);
+
+    if (loading) return <div>Fetching data from YouTube</div>;
+    if (!loading && !info) return <div>No data found.</div>;
     return (
         <section className="mt-32 flex flex-col lg:flex-row gap-12 items-center justify-center">
             <motion.div
@@ -29,7 +40,7 @@ export default function VideoDetails({ video_id }: { video_id: string }) {
                 <div className="relative max-w-lg rounded-2xl overflow-hidden bg-surface-container-lowest ring-1 ring-outline-variant/15 aspect-video shadow-2xl transition-transform duration-500 hover:scale-[1.01]">
                     <img
                         src={
-                            info?.basic_info.thumbnail?.[0]?.url ||
+                            info?.basic_info?.thumbnail?.[0]?.url ||
                             "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
                         }
                         alt="Video thumbnail"
@@ -37,7 +48,7 @@ export default function VideoDetails({ video_id }: { video_id: string }) {
                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                     />
                     <div className="absolute bottom-4 right-4 px-3 py-1 bg-black/80 backdrop-blur-md rounded text-[10px] font-mono uppercase tracking-widest text-white">
-                        {info?.basic_info.like_count || "0"} Likes
+                        {info?.basic_info?.like_count || "0"} Likes
                     </div>
                 </div>
             </motion.div>

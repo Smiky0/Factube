@@ -2,29 +2,33 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight02Icon, Link01Icon } from "@hugeicons/core-free-icons";
-import Navbar from "../components/Navbar";
 import VideoDetails from "../components/VideoDetails";
 import TranscriptContent from "../components/TranscriptContent";
 import Footer from "../components/Footer";
+import { youtube_parser } from "../lib/youtubeParser";
 
 export default function App() {
     const [url, setUrl] = useState("");
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [status, setStatus] = useState<string>("");
+    const [videoID, setVideoID] = useState<string>("");
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         if (url) {
-            console.log(isAnalyzing);
-            setIsAnalyzing(true);
-            // Simulate analysis
-            setTimeout(() => setIsAnalyzing(false), 2000);
+            const vid_id = youtube_parser(url);
+            if (!vid_id) {
+                setStatus("Invalid URL. Try putting a valid URL");
+                return;
+            } else {
+                // console.log(vid_id);
+                setVideoID(vid_id);
+			}
+			setStatus("")
         }
     };
 
     return (
         <div className="min-h-screen flex flex-col">
-            {/* Top Navigation Bar */}
-            <Navbar />
             <main className="flex-1 max-w-7xl mx-auto px-6 md:px-8 py-16 lg:py-24 w-full">
                 {/* Hero Section */}
                 <section className="max-w-4xl mx-auto text-center space-y-12">
@@ -82,11 +86,18 @@ export default function App() {
                     </motion.form>
                 </section>
 
+                {/*  invalid url */}
+                {status && (
+                    <div className="flex justify-center items-center m-10 text-red-400">
+                        {status}
+                    </div>
+                )}
+
                 {/* Video Detail Section */}
-                <VideoDetails video_id={"BsnCpESUEqM"} />
+                {videoID && <VideoDetails video_id={videoID} />}
 
                 {/* Transcript/Content Block */}
-                <TranscriptContent />
+                {videoID && <TranscriptContent video_id={videoID} />}
             </main>
 
             {/* Footer */}
