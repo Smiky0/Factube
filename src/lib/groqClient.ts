@@ -1,14 +1,12 @@
 import "dotenv/config";
 import OpenAI from "openai";
-import { SYSTEM_PROMPT, USER_PROMPT } from "../prompt.js";
+import { SYSTEM_PROMPT, USER_PROMPT } from "./prompt.js";
 const client = new OpenAI({
     apiKey: process.env.GROQ_API_KEY,
     baseURL: "https://api.groq.com/openai/v1",
 });
 
-export async function fact_check_withGroq(
-    transcript: string,
-) {
+export async function fact_check_withGroq(transcript: string) {
     const response = await client.chat.completions.create({
         model: "openai/gpt-oss-20b",
         messages: [

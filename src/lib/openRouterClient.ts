@@ -1,16 +1,14 @@
 import "dotenv/config";
 import OpenAI from "openai";
-import { SYSTEM_PROMPT } from "../prompt.js";
-import { USER_PROMPT } from "../prompt.js";
+import { SYSTEM_PROMPT } from "./prompt.js";
+import { USER_PROMPT } from "./prompt.js";
 
 const client = new OpenAI({
     apiKey: process.env.OPENROUTER_API_KEY,
     baseURL: "https://openrouter.ai/api/v1",
 });
 
-export async function fact_check_withOpenRouter(
-    transcript: string,
-) {
+export async function fact_check_withOpenRouter(transcript: string) {
     const response = await client.chat.completions.create({
         model: "meta-llama/llama-3.1-8b-instruct",
         messages: [

@@ -2,11 +2,10 @@ import "dotenv/config";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
-import { supabase } from "./lib/supabaseClient.js";
-import { fetchTranscript } from "youtube-transcript-plus";
-import { fact_check_withGemini } from "./lib/geminiClient.js";
-import { fact_check_withGroq } from "./lib/groqClient.js";
-import { fact_check_withOpenRouter } from "./lib/openRouterClient.js";
+import { fact_check_withAI } from "./services/factCheck.js";
+import { get_youtubetranscript } from "./services/getTranscript.js";
+import { find_conclusion, save_conclusion } from "./services/databaseAction.js";
+import { youtube_parser } from "./services/ytParser.js";
 
 const app = new Hono();
 
@@ -18,84 +17,10 @@ app.get("/health", (c) => {
     return c.text("Service is UP and RUNNING.");
 });
 
-// get video ID from youtube URL
-function youtube_parser(url: string) {
-    var regExp =
-        /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-    var match = url.match(regExp);
-    return match && match[7].length == 11 ? match[7] : false;
-}
-
-// get the youtube conclusion if video id is available.
-async function find_conclusion(video_id: string) {
-    const { data, error } = await supabase
-        .from("youtube_facts")
-        .select("conclusion")
-        .eq("video_id", video_id)
-        .single();
-    if (error) {
-        return null;
-    }
-    return data;
-}
-
-async function save_conclusion(video_id: string, conclusion: string) {
-    const { data, error } = await supabase.from("youtube_facts").insert({
-        video_id: video_id,
-        conclusion: conclusion,
-    });
-    console.log("data: ", data);
-    console.log("error: ", error);
-    return error ? null : data;
-}
-
-// get the youtube transcript
-async function get_youtubetranscript(video_id: string) {
-    try {
-        const transcript = await fetchTranscript(video_id);
-        const text = transcript.map((t) => t.text).join(" ");
-        // console.log(text);
-        return text;
-    } catch (err) {
-        console.error("Caption fetch failed:", err);
-        return null;
-    }
-}
-
-// third party libraries are cooked none of them can fetch data rn.
-// async function get_youtubecaption(video_id: string) {
-//     const yt = await Innertube.create();
-//     const info = await yt.getInfo(video_id);
-//     const transcriptData = await info.getTranscript();
-
-//     const segments =
-//         transcriptData?.transcript?.content?.body?.initial_segments;
-//     if (!segments) return null;
-
-//     const text = segments.map((s: any) => s.snippet.text).join(" ");
-//     return text;
-// }
-
-// send the text transcript to AI agent along with video URL and ask to fact check
-async function fact_check_withAI(transcript: string) {
-    const geminiResponse = await fact_check_withGemini(transcript);
-    if (!geminiResponse) {
-        const groqResponse = await fact_check_withGroq(transcript);
-        if (!groqResponse) {
-            const openrouterResponse =
-                await fact_check_withOpenRouter(transcript);
-            if (!openrouterResponse) {
-                return null;
-            } else {
-                return openrouterResponse;
-            }
-        } else {
-            return groqResponse;
-        }
-    } else {
-        return geminiResponse;
-    }
-}
+// home page
+app.get("/", (c) => {
+    return c.text("Heyooo...");
+});
 
 // check in DB for result.
 app.post("/url", async (c) => {
@@ -146,6 +71,7 @@ app.post("/url", async (c) => {
     }
 });
 
+//
 app.notFound((c) => {
     return c.text("Page not found", 404);
 });
