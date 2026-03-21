@@ -71,7 +71,7 @@ app.post("/url", async (c) => {
     }
 });
 
-//
+// wrong url 
 app.notFound((c) => {
     return c.text("Page not found", 404);
 });
