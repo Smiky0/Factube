@@ -77,10 +77,10 @@ export default function About() {
                         height={50}
                     />
                     <span className="text-xl font-medium text-gray-900">
-                        Factube
+                        FactTube
                     </span>
                 </div>
-                <p className="text-sm text-gray-500 leading-relaxed">
+                <p className="text-sm text-text/80 leading-relaxed">
                     Factube automatically fact-checks YouTube videos by
                     analyzing their transcripts and verifying claims against
                     trusted sources — so you don't have to do the research
@@ -88,7 +88,7 @@ export default function About() {
                 </p>
             </motion.div>
 
-            <hr className="border-gray-100 mb-8" />
+            <hr className="border-text mb-8" />
 
             {/* how it works */}
             <motion.div
@@ -97,20 +97,20 @@ export default function About() {
                 transition={{ delay: 0.1 }}
                 className="mb-8"
             >
-                <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-4">
+                <p className="text-xs font-medium text-text/90 uppercase tracking-wider mb-4">
                     How it works
                 </p>
                 <div className="divide-y divide-gray-100">
                     {steps.map((step, i) => (
                         <div key={i} className="flex gap-4 py-4">
-                            <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-500 shrink-0 mt-0.5">
+                            <div className="w-6 h-6 rounded-full bg-background-dark flex items-center justify-center text-xs font-medium text-text shrink-0 mt-0.5">
                                 {i + 1}
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-900 mb-1">
+                                <p className="text-sm font-medium text-text/90 mb-1">
                                     {step.title}
                                 </p>
-                                <p className="text-sm text-gray-500 leading-relaxed">
+                                <p className="text-sm text-text/80 leading-relaxed">
                                     {step.desc}
                                 </p>
                             </div>
@@ -119,7 +119,7 @@ export default function About() {
                 </div>
             </motion.div>
 
-            <hr className="border-gray-100 mb-8" />
+            <hr className="border-text mb-8" />
 
             {/* verdict types */}
             <motion.div
@@ -128,21 +128,21 @@ export default function About() {
                 transition={{ delay: 0.15 }}
                 className="mb-8"
             >
-                <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-4">
+                <p className="text-xs font-medium text-text/90 uppercase tracking-wider mb-4">
                     Verdict types
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                     {verdicts.map((v) => (
                         <div
                             key={v.label}
-                            className="bg-gray-50 rounded-lg p-3"
+                            className="bg-white/80 rounded-lg p-3"
                         >
                             <span
                                 className={`inline-block text-xs font-medium px-2 py-0.5 rounded mb-2 ${v.style}`}
                             >
                                 {v.label}
                             </span>
-                            <p className="text-xs text-gray-500 leading-relaxed">
+                            <p className="text-xs text-text/80 leading-relaxed">
                                 {v.desc}
                             </p>
                         </div>
@@ -150,7 +150,7 @@ export default function About() {
                 </div>
             </motion.div>
 
-            <hr className="border-gray-100 mb-8" />
+            <hr className="border-text mb-8" />
 
             {/* limitations */}
             <motion.div
@@ -159,23 +159,23 @@ export default function About() {
                 transition={{ delay: 0.2 }}
                 className="mb-8"
             >
-                <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-4">
+                <p className="text-xs font-medium text-text/90 uppercase tracking-wider mb-4">
                     Limitations
                 </p>
                 <ul className="space-y-2">
                     {limitations.map((l, i) => (
                         <li
                             key={i}
-                            className="flex gap-3 text-sm text-gray-500 leading-relaxed"
+                            className="flex gap-3 text-sm text-text/80 leading-relaxed"
                         >
-                            <span className="w-1.5 h-1.5 rounded-full bg-gray-300 shrink-0 mt-2" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-background-dark shrink-0 mt-2" />
                             {l}
                         </li>
                     ))}
                 </ul>
             </motion.div>
 
-            <hr className="border-gray-100 mb-8" />
+            <hr className="border-text mb-8" />
 
             {/* contact */}
             <motion.div
@@ -184,10 +184,10 @@ export default function About() {
                 transition={{ delay: 0.25 }}
                 className="mb-8"
             >
-                <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-4">
+                <p className="text-xs font-medium text-text/90 uppercase tracking-wider mb-4">
                     Get in touch
                 </p>
-                <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                <p className="text-sm text-text/80 leading-relaxed mb-4">
                     Factube is an open-source side project. If you've found a
                     bug, have a feature idea, or just want to say hi — the
                     GitHub repo is the best place to reach out.
@@ -204,16 +204,16 @@ export default function About() {
                         </svg>
                     </div>
                     <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium">
                             GitHub — smiky0/factube
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-text/60">
                             Source code, issues, and contributions
                         </p>
                     </div>
                     <HugeiconsIcon icon={Link01Icon} />
                 </Link>
-                <p className="text-xs text-gray-400 leading-relaxed mt-4">
+                <p className="text-xs text-text/80 leading-relaxed mt-4">
                     For bug reports or feature requests, please open an issue on
                     GitHub rather than sending a direct message — it keeps
                     things organized and lets others follow along too.
@@ -221,7 +221,7 @@ export default function About() {
             </motion.div>
 
             <div className="pt-6 border-t border-gray-100 flex items-center justify-between">
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-text/80">
                     Built to make information more trustworthy.
                 </span>
                 <div className="flex flex-wrap gap-1.5">
@@ -235,7 +235,7 @@ export default function About() {
                     ].map((tag) => (
                         <span
                             key={tag}
-                            className="text-xs px-2 py-0.5 bg-gray-50 border border-gray-200 rounded text-gray-400"
+                            className="text-xs px-2 py-0.5 bg-gray-50 border border-gray-200 rounded text-text/60"
                         >
                             {tag}
                         </span>

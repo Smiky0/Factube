@@ -37,11 +37,11 @@ export default function App() {
                         animate={{ opacity: 1, y: 0 }}
                         className="space-y-4"
                     >
-                        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-on-surface leading-tight">
+                        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-text leading-tight">
                             Refine your{" "}
                             <span className="text-primary">facts.</span>
                         </h1>
-                        <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-tertiary-container">
+                        <p className="font-mono text-[12px] md:text-xs uppercase tracking-[0.3em] text-tertiary-container">
                             Streamline video analysis in seconds
                         </p>
                     </motion.div>
@@ -53,7 +53,7 @@ export default function App() {
                         onSubmit={handleSearch}
                         className="relative group max-w-2xl mx-auto"
                     >
-                        <div className="flex flex-col md:flex-row gap-4 p-2 bg-surface-container-low rounded-xl ring-1 ring-outline-variant/15 shadow-2xl shadow-black/20 focus-within:ring-primary/50 transition-all duration-300">
+                        <div className="flex flex-col md:flex-row gap-4 p-2 bg-background-dark rounded-xl ring-1 ring-secondary shadow-2xl shadow-black/20 focus-within:ring-primary/50 transition-all duration-300">
                             <div className="flex-1 flex items-center px-4">
                                 <HugeiconsIcon
                                     icon={Link01Icon}
@@ -65,17 +65,14 @@ export default function App() {
                                     value={url}
                                     onChange={(e) => setUrl(e.target.value)}
                                     placeholder="Paste YouTube URL here..."
-                                    className="bg-transparent outline-none border-none focus:ring-0 w-full text-on-surface placeholder:text-tertiary-container/50 py-3 text-sm md:text-base"
+                                    className="bg-transparent outline-none border-none focus:ring-0 w-full text-secondary/90 placeholder:text-text/60 py-3 text-sm md:text-base"
                                 />
                             </div>
                             <button
                                 type="submit"
                                 className="cta-gradient text-background font-bold px-8 py-3 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all active:scale-95 whitespace-nowrap"
                             >
-                                <div className="flex group cursor-pointer">
-                                    <span className="uppercase tracking-widest text-[10px] font-bold">
-                                        Search
-                                    </span>
+                                <div className="flex items-center justify-center gap-1 group text-text cursor-pointer">
                                     <HugeiconsIcon
                                         icon={ArrowRight02Icon}
                                         className="group-hover:translate-x-2 transition-all duration-300"
