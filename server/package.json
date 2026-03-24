@@ -12,6 +12,7 @@
         "@supabase/supabase-js": "^2.99.3",
         "dotenv": "^17.3.1",
         "hono": "^4.12.8",
+        "hono-rate-limiter": "^0.5.3",
         "openai": "^6.32.0",
         "youtube-transcript-plus": "^1.2.0",
         "youtubei.js": "^17.0.1"

@@ -7,12 +7,23 @@ import { get_youtubetranscript } from "./services/getTranscript.js";
 import { find_conclusion, save_conclusion } from "./services/databaseAction.js";
 import { getVideoDetails } from "./services/getVideoDetails.js";
 import { cors } from "hono/cors";
+import { rateLimiter } from "hono-rate-limiter";
 const CLIENT_URL = process.env.CLIENT_URL;
 
 const app = new Hono();
 
+// middlewares
 // log each request in production
 app.use(logger());
+
+// rate limit users by ip
+app.use(
+    rateLimiter({
+        windowMs: 1 * 60 * 1000, // 1 min
+        limit: 10, // 10 req/min
+        keyGenerator: (c) => c.req.header("x-forwarded-for") ?? "",
+    }),
+);
 
 // get rid of cors
 app.use(
@@ -99,7 +110,7 @@ app.notFound((c) => {
 });
 
 app.onError((err, c) => {
-    // console.log(err);
+    console.log(err);
     return c.text("Caused an uncaught error.", 500);
 });
 
@@ -109,6 +120,6 @@ serve(
         port: 3000,
     },
     (info) => {
-        // console.log(`Server is running on http://localhost:${info.port}`);
+        console.log(`Server is running on http://localhost:${info.port}`);
     },
 );
