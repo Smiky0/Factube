@@ -35,12 +35,25 @@ export default function TranscriptContent({ video_id }: { video_id: string }) {
                 const res = await fetch(`${BASE_URL}/url?q=${video_id}`, {
                     method: "POST",
                 });
-                // if status isnt 200
-                if (!res.ok) {
-                    // reutrn whatever server says.
-                    setException(res.statusText);
-                }
+
                 const data = await res.json();
+
+                // Check for error response
+                if (!res.ok || data.error) {
+                    setException(
+                        data.error || res.statusText || "Unknown error",
+                    );
+                    setFacts(null);
+                    return;
+                }
+
+                // Parse conclusion data
+                if (!data.conclusion) {
+                    setException("No data received from server");
+                    setFacts(null);
+                    return;
+                }
+
                 const conclusion =
                     typeof data.conclusion === "string" ?
                         JSON.parse(data.conclusion)
@@ -48,9 +61,10 @@ export default function TranscriptContent({ video_id }: { video_id: string }) {
 
                 setFacts(conclusion);
             } catch (err) {
-                console.log(err);
+                console.error("Error fetching facts:", err);
+                setException("Failed to process response");
+                setFacts(null);
             } finally {
-                // console.log("facts", facts);
                 setLoading(false);
             }
         };
