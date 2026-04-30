@@ -59,48 +59,35 @@ app.get("/api/video_details", async (c) => {
 // get AI fact check.
 app.post("/url", async (c) => {
     const vid_id = c.req.query("q");
-    // console.log(vid_id);
     if (!vid_id) {
-        // invalid url
-        return c.text("Invalid URL");
-    } else {
-        // valid url
+        return c.json({ error: "Invalid URL" }, 400);
+    }
+
+    try {
         // check ID against the DB
         const conclusion = await find_conclusion(vid_id);
-        // console.log("Got data from DB");
-        // if result is found
         if (conclusion) {
             return c.json(conclusion);
         }
-        // if not found
-        // fetch the youtube transcribe
 
-        // try youtube transcript first
+        // fetch the youtube transcript
         const transcript = await get_youtubetranscript(vid_id);
         if (!transcript) {
-            // try youtube caption as fallback (not working for now)
-            // const captions = await get_youtubecaption(vid_id);
-            // return c.json(captions);
-            // console.log("no transcript?");
-            return c.json(null);
-        } else {
-            // successfully got transcript
-            // send transcript to AI for fact checking
-
-            const conclusion = await fact_check_withAI(transcript);
-            // console.log("Fact checked from AI");
-
-            // if AI responses right push it to DB and send to user
-            if (conclusion) {
-                // console.log("Saving details to DB");
-                await save_conclusion(vid_id, conclusion);
-                return c.json(conclusion);
-            } else {
-                // otherwise return null.
-                // console.log("is it here wtf");
-                return c.json(null);
-            }
+            return c.json({ error: "No transcript available" }, 404);
         }
+
+        // send transcript to AI for fact checking
+        const aiConclusion = await fact_check_withAI(transcript);
+        if (!aiConclusion) {
+            return c.json({ error: "AI fact-checking failed" }, 500);
+        }
+
+        // save to DB and return
+        await save_conclusion(vid_id, aiConclusion);
+        return c.json({ conclusion: aiConclusion });
+    } catch (error) {
+        console.error("Error in fact-checking endpoint:", error);
+        return c.json({ error: "Internal server error" }, 500);
     }
 });
 
